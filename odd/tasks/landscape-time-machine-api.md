@@ -39,7 +39,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - Completion gate: LTM-002 remains complete only while the retained baseline behavior and every required verification command pass after slicing.
 - Slice evidence:
   - `feat/ltm-002-domain-storage` — commit `1543632`; 377 authored changed lines; assessed medium with `review_due_reason: under_budget`.
-- Repository status: slicing on `feat/ltm-002-assets`, based on `1543632`.
+  - `feat/ltm-002-assets` — commit `f4a0b46`; 292 authored changed lines; 7 focused tests passed.
+- Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
+- Repository status: slicing on `feat/ltm-002-timeshifts`, based on `f4a0b46`.
 
 ## Tasks
 
@@ -47,10 +49,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Route: inline fallback after the delegated writer was unavailable; the writer trigger was recorded.
   - Acceptance: server starts with validated configuration and no secret is exposed.
   - Checks: `npm run typecheck` passed; `npm test` passed (5 tests across 2 files); `npx wrangler types --check` passed; `npx wrangler deploy --dry-run` bundled the Worker successfully.
-  - Review: assessed medium (`slice_budget_reached`); candidate review was declined after the bound reviewer transport rejected its repository context. Future reviews remain enabled.
+  - Review: assessed medium (`slice_budget_reached`); candidate review was declined after the bound reviewer transport rejected its repository context. Clone-local RDD was later disabled after another scope-binding failure.
 
 - [ ] LTM-002 — Implement versioned API contracts and in-memory job/asset boundaries.
-  - Route: delegated direct; implementation is GREEN, while the five feature-branch-chain commits remain to be materialized.
+  - Route: delegated direct; implementation is GREEN, with two of five feature-branch-chain commits materialized.
   - Acceptance: upload, TimeShift, Director, job lookup, and cancellation routes validate documented inputs and state transitions.
   - Checks: `npm test` passed (43 tests across 6 files); `npm run typecheck` passed; `npx wrangler types --check` passed; Wrangler deployment dry-run bundled successfully.
   - Boundary: TimeShift queues only local state; Director validates succeeded TimeShift jobs and returns `DIRECTOR_WORKFLOW_NOT_DEPLOYED` without creating a job.
@@ -70,12 +72,14 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Three LTX validation clips completed through Comfy Cloud: landscape, city, and architectural scene. The city prompt was corrected after scopes detected excessive cyan saturation and insufficient luminance lift.
 - 2026-10-16 — LTM-001 scaffold completed with a Workers module handler, configuration validation, health endpoint, deterministic tests, and local scripts. Typecheck, five focused tests, Wrangler type verification, and a deployment dry run passed.
 - 2026-10-16 — LTM-001 closed in work-unit commit `69718b9` (`feat(api): scaffold Cloudflare Worker foundation`).
-- 2026-10-16 — Native review consent was granted, but the bound reviewer transport rejected the repository context. The user chose to continue without reporting and declined only this candidate; RDD remains enabled.
+- 2026-10-16 — Native review consent was granted, but the bound reviewer transport rejected the repository context. The user chose to continue without reporting and declined that candidate.
 - 2026-10-16 — LTM-002 implemented versioned upload, TimeShift, Director validation, job lookup, and cancellation contracts over injected in-memory stores. All 43 tests, typecheck, Wrangler type verification, and deployment dry-run passed; no external provider job was submitted.
 - 2026-10-16 — The user selected `feature-branch-chain`. One slicing pass produced five cohesive review slices, each below 400 authored changed lines.
 - 2026-10-16 — Domain/storage slice committed as `1543632` (`feat(api): add domain and storage boundaries`); native assessment returned medium/under-budget.
-- Pending: materialize and verify the five LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
+- 2026-10-16 — Assets slice committed as `f4a0b46` (`feat(api): add asset upload endpoint`); all 7 focused tests passed.
+- 2026-10-16 — The accumulated committed candidate reached the review budget, but the provider-issued continuation rebound it to unrelated unstaged paths. No review was started; the user disabled RDD for this clone only and retained ordinary verification.
+- Pending: materialize and verify the remaining three LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
 
-Commit and verify the five LTM-002 chain slices in dependency order, then begin LTM-003 without weakening the current Director deployment boundary.
+Commit and verify the remaining three LTM-002 chain slices in dependency order, then begin LTM-003 without weakening the current Director deployment boundary.
