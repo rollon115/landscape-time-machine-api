@@ -28,8 +28,16 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 ## Delivery strategy
 
 - Strategy: ask-on-risk.
-- Forecast: under 400 authored changed lines for the foundation slice, excluding generated lockfiles.
-- Repository status: feature branch `feat/ltm-001-foundation`; LTM-001 work-unit commit `69718b9`.
+- Chain strategy: `feature-branch-chain`, selected 2026-10-16 after the LTM-002 working diff reached 1,068 authored changed lines.
+- Proposed child order and dependencies:
+  1. `feat/ltm-002-domain-storage` — domain models, storage boundaries, in-memory adapters, shared request/error foundations, and storage tests; based on committed LTM-001.
+  2. `feat/ltm-002-assets` — asset upload, shared deterministic API-test helpers, and focused upload tests; based on `feat/ltm-002-domain-storage`.
+  3. `feat/ltm-002-timeshifts` — TimeShift handler and focused contract tests; based on `feat/ltm-002-assets`.
+  4. `feat/ltm-002-jobs-director` — job lookup/cancellation, Director validation, and focused tests; based on `feat/ltm-002-timeshifts`.
+  5. `feat/ltm-002-routing-docs` — top-level routing, health-contract alignment, README, and final ODD evidence; based on `feat/ltm-002-jobs-director`.
+- Tracker: the transaction controller will create the required draft/no-merge integration tracker when it materializes the branch and PR chain.
+- Completion gate: LTM-002 remains complete only while the retained baseline behavior and every required verification command pass after slicing.
+- Repository status: slicing on `feat/ltm-002-domain-storage`, based on LTM-001 work-unit commit `69718b9`.
 
 ## Tasks
 
@@ -37,15 +45,17 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Route: inline fallback after the delegated writer was unavailable; the writer trigger was recorded.
   - Acceptance: server starts with validated configuration and no secret is exposed.
   - Checks: `npm run typecheck` passed; `npm test` passed (5 tests across 2 files); `npx wrangler types --check` passed; `npx wrangler deploy --dry-run` bundled the Worker successfully.
+  - Review: assessed medium (`slice_budget_reached`); candidate review was declined after the bound reviewer transport rejected its repository context. Future reviews remain enabled.
 
 - [ ] LTM-002 — Implement versioned API contracts and in-memory job/asset boundaries.
-  - Route: delegated direct; writer trigger (multiple non-trivial files).
+  - Route: delegated direct; implementation is GREEN, while the five feature-branch-chain commits remain to be materialized.
   - Acceptance: upload, TimeShift, Director, job lookup, and cancellation routes validate documented inputs and state transitions.
-  - Checks: contract/domain tests with deterministic fakes.
+  - Checks: `npm test` passed (43 tests across 6 files); `npm run typecheck` passed; `npx wrangler types --check` passed; Wrangler deployment dry-run bundled successfully.
+  - Boundary: TimeShift queues only local state; Director validates succeeded TimeShift jobs and returns `DIRECTOR_WORKFLOW_NOT_DEPLOYED` without creating a job.
 
-- [ ] LTM-003 — Add Comfy adapter boundary and truthful Director blocked state.
+- [ ] LTM-003 — Add the live Comfy adapter and provider-status mapping.
   - Route: delegated direct; writer trigger (multiple non-trivial files).
-  - Acceptance: TimeShift persists provider IDs through an adapter; Director never claims 3D composition is implemented.
+  - Acceptance: TimeShift persists provider IDs through an adapter; the existing Director deployment boundary remains truthful.
   - Checks: service tests for provider/status mapping and Director blocking.
 
 - [ ] LTM-004 — Document setup, capability limits, and next workflow-export step.
@@ -58,8 +68,11 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Three LTX validation clips completed through Comfy Cloud: landscape, city, and architectural scene. The city prompt was corrected after scopes detected excessive cyan saturation and insufficient luminance lift.
 - 2026-10-16 — LTM-001 scaffold completed with a Workers module handler, configuration validation, health endpoint, deterministic tests, and local scripts. Typecheck, five focused tests, Wrangler type verification, and a deployment dry run passed.
 - 2026-10-16 — LTM-001 closed in work-unit commit `69718b9` (`feat(api): scaffold Cloudflare Worker foundation`).
-- Pending: implement LTM-002. The versioned LTX API workflow remains to be exported and deployed.
+- 2026-10-16 — Native review consent was granted, but the bound reviewer transport rejected the repository context. The user chose to continue without reporting and declined only this candidate; RDD remains enabled.
+- 2026-10-16 — LTM-002 implemented versioned upload, TimeShift, Director validation, job lookup, and cancellation contracts over injected in-memory stores. All 43 tests, typecheck, Wrangler type verification, and deployment dry-run passed; no external provider job was submitted.
+- 2026-10-16 — The user selected `feature-branch-chain`. One slicing pass produced five cohesive review slices, each below 400 authored changed lines.
+- Pending: materialize and verify the five LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
 
-Implement and verify the LTM-002 versioned API contracts and in-memory boundaries.
+Commit and verify the five LTM-002 chain slices in dependency order, then begin LTM-003 without weakening the current Director deployment boundary.
