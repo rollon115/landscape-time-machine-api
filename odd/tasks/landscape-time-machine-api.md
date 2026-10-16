@@ -29,7 +29,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 
 - Strategy: ask-on-risk.
 - Forecast: under 400 authored changed lines for the foundation slice, excluding generated lockfiles.
-- Repository status: feature branch `feat/ltm-001-foundation` exists; the first work-unit commit is pending.
+- Repository status: feature branch `feat/ltm-001-foundation`; LTM-001 work-unit commit `69718b9`.
 
 ## Tasks
 
@@ -57,8 +57,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 
 - 2026-10-16 — Three LTX validation clips completed through Comfy Cloud: landscape, city, and architectural scene. The city prompt was corrected after scopes detected excessive cyan saturation and insufficient luminance lift.
 - 2026-10-16 — LTM-001 scaffold completed with a Workers module handler, configuration validation, health endpoint, deterministic tests, and local scripts. Typecheck, five focused tests, Wrangler type verification, and a deployment dry run passed.
-- Pending: create the feature branch and work-unit commit, then implement LTM-002. The versioned LTX API workflow remains to be exported and deployed.
+- 2026-10-16 — LTM-001 closed in work-unit commit `69718b9` (`feat(api): scaffold Cloudflare Worker foundation`).
+- Pending: implement LTM-002. The versioned LTX API workflow remains to be exported and deployed.
 
 ## Next step
 
-Create the LTM-001 work-unit commit, then implement and verify the LTM-002 versioned API contracts and in-memory boundaries.
+Implement and verify the LTM-002 versioned API contracts and in-memory boundaries.
