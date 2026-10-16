@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "landscape-time-machine",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "COMFY_BASE_URL": "https://api.comfy.org"
+  }
+  // Secret (NOT a plain var): set with
+  //   npx wrangler secret put COMFY_API_KEY
+  // Locally, mirror it in .dev.vars (see .dev.vars.example).
+}

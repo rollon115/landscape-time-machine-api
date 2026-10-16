@@ -1,0 +1,21 @@
+{
+  "name": "landscape-time-machine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Developer API that turns a single landscape image into a validated 20-second LTX time-lapse.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261016.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12",
+    "wrangler": "^4.151.1"
+  }
+}

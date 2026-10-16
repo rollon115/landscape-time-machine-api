@@ -1,0 +1,5 @@
+# Copy this file to `.dev.vars` for local development.
+# `.dev.vars` is gitignored and must never be committed.
+#
+# Server-only credential: it is never logged nor returned in a response.
+COMFY_API_KEY=replace-me-with-your-comfy-cloud-api-key
