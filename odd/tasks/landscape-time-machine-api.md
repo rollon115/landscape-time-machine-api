@@ -37,7 +37,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   5. `feat/ltm-002-routing-docs` — top-level routing, health-contract alignment, README, and final ODD evidence; based on `feat/ltm-002-jobs-director`.
 - Tracker: the transaction controller will create the required draft/no-merge integration tracker when it materializes the branch and PR chain.
 - Completion gate: LTM-002 remains complete only while the retained baseline behavior and every required verification command pass after slicing.
-- Repository status: slicing on `feat/ltm-002-domain-storage`, based on LTM-001 work-unit commit `69718b9`.
+- Slice evidence:
+  - `feat/ltm-002-domain-storage` — commit `1543632`; 377 authored changed lines; assessed medium with `review_due_reason: under_budget`.
+- Repository status: slicing on `feat/ltm-002-assets`, based on `1543632`.
 
 ## Tasks
 
@@ -71,6 +73,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Native review consent was granted, but the bound reviewer transport rejected the repository context. The user chose to continue without reporting and declined only this candidate; RDD remains enabled.
 - 2026-10-16 — LTM-002 implemented versioned upload, TimeShift, Director validation, job lookup, and cancellation contracts over injected in-memory stores. All 43 tests, typecheck, Wrangler type verification, and deployment dry-run passed; no external provider job was submitted.
 - 2026-10-16 — The user selected `feature-branch-chain`. One slicing pass produced five cohesive review slices, each below 400 authored changed lines.
+- 2026-10-16 — Domain/storage slice committed as `1543632` (`feat(api): add domain and storage boundaries`); native assessment returned medium/under-budget.
 - Pending: materialize and verify the five LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
