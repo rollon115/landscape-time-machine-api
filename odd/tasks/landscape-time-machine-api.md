@@ -40,8 +40,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - Slice evidence:
   - `feat/ltm-002-domain-storage` — commit `1543632`; 377 authored changed lines; assessed medium with `review_due_reason: under_budget`.
   - `feat/ltm-002-assets` — commit `f4a0b46`; 292 authored changed lines; 7 focused tests passed.
+  - `feat/ltm-002-timeshifts` — commit `6abd61f`; 152 authored changed lines; 7 focused tests passed.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
-- Repository status: slicing on `feat/ltm-002-timeshifts`, based on `f4a0b46`.
+- Repository status: slicing on `feat/ltm-002-jobs-director`, based on `6abd61f`.
 
 ## Tasks
 
@@ -52,7 +53,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Review: assessed medium (`slice_budget_reached`); candidate review was declined after the bound reviewer transport rejected its repository context. Clone-local RDD was later disabled after another scope-binding failure.
 
 - [ ] LTM-002 — Implement versioned API contracts and in-memory job/asset boundaries.
-  - Route: delegated direct; implementation is GREEN, with two of five feature-branch-chain commits materialized.
+  - Route: delegated direct; implementation is GREEN, with three of five feature-branch-chain commits materialized.
   - Acceptance: upload, TimeShift, Director, job lookup, and cancellation routes validate documented inputs and state transitions.
   - Checks: `npm test` passed (43 tests across 6 files); `npm run typecheck` passed; `npx wrangler types --check` passed; Wrangler deployment dry-run bundled successfully.
   - Boundary: TimeShift queues only local state; Director validates succeeded TimeShift jobs and returns `DIRECTOR_WORKFLOW_NOT_DEPLOYED` without creating a job.
@@ -78,6 +79,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Domain/storage slice committed as `1543632` (`feat(api): add domain and storage boundaries`); native assessment returned medium/under-budget.
 - 2026-10-16 — Assets slice committed as `f4a0b46` (`feat(api): add asset upload endpoint`); all 7 focused tests passed.
 - 2026-10-16 — The accumulated committed candidate reached the review budget, but the provider-issued continuation rebound it to unrelated unstaged paths. No review was started; the user disabled RDD for this clone only and retained ordinary verification.
+- 2026-10-16 — TimeShift slice committed as `6abd61f` (`feat(api): add timeshift job endpoint`); all 7 focused tests passed.
 - Pending: materialize and verify the remaining three LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
