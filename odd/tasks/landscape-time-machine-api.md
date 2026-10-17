@@ -41,8 +41,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - `feat/ltm-002-domain-storage` — commit `1543632`; 377 authored changed lines; assessed medium with `review_due_reason: under_budget`.
   - `feat/ltm-002-assets` — commit `f4a0b46`; 292 authored changed lines; 7 focused tests passed.
   - `feat/ltm-002-timeshifts` — commit `6abd61f`; 152 authored changed lines; 7 focused tests passed.
+  - `feat/ltm-002-jobs-director` — commit `7c34e2c`; 310 authored changed lines; 16 focused tests passed.
+  - `feat/ltm-002-routing-docs` — 206 authored changed lines; full verification passed; commit identity recorded by the closure evidence update.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
-- Repository status: slicing on `feat/ltm-002-jobs-director`, based on `6abd61f`.
+- Repository status: all five LTM-002 slices are implemented and verified on the feature-branch chain.
 
 ## Tasks
 
@@ -52,11 +54,12 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Checks: `npm run typecheck` passed; `npm test` passed (5 tests across 2 files); `npx wrangler types --check` passed; `npx wrangler deploy --dry-run` bundled the Worker successfully.
   - Review: assessed medium (`slice_budget_reached`); candidate review was declined after the bound reviewer transport rejected its repository context. Clone-local RDD was later disabled after another scope-binding failure.
 
-- [ ] LTM-002 — Implement versioned API contracts and in-memory job/asset boundaries.
-  - Route: delegated direct; implementation is GREEN, with three of five feature-branch-chain commits materialized.
+- [x] LTM-002 — Implement versioned API contracts and in-memory job/asset boundaries.
+  - Route: delegated direct; all five feature-branch-chain slices are implemented and verified.
   - Acceptance: upload, TimeShift, Director, job lookup, and cancellation routes validate documented inputs and state transitions.
   - Checks: `npm test` passed (43 tests across 6 files); `npm run typecheck` passed; `npx wrangler types --check` passed; Wrangler deployment dry-run bundled successfully.
   - Boundary: TimeShift queues only local state; Director validates succeeded TimeShift jobs and returns `DIRECTOR_WORKFLOW_NOT_DEPLOYED` without creating a job.
+  - Review: `disabled/unmanaged` by explicit clone-local user choice; ordinary verification is the evidence of record.
 
 - [ ] LTM-003 — Add the live Comfy adapter and provider-status mapping.
   - Route: delegated direct; writer trigger (multiple non-trivial files).
@@ -80,8 +83,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Assets slice committed as `f4a0b46` (`feat(api): add asset upload endpoint`); all 7 focused tests passed.
 - 2026-10-16 — The accumulated committed candidate reached the review budget, but the provider-issued continuation rebound it to unrelated unstaged paths. No review was started; the user disabled RDD for this clone only and retained ordinary verification.
 - 2026-10-16 — TimeShift slice committed as `6abd61f` (`feat(api): add timeshift job endpoint`); all 7 focused tests passed.
-- Pending: materialize and verify the remaining three LTM-002 commits, then implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
+- 2026-10-16 — Jobs/Director slice committed as `7c34e2c` (`feat(api): add job and director endpoints`); all 16 focused tests passed.
+- 2026-10-17 — Routing/docs slice passed all 43 tests, TypeScript typecheck, Wrangler generated-type verification, deployment dry-run (13.41 KiB / gzip 4.00 KiB), and staged-diff whitespace validation.
+- Pending: implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
 
-Commit and verify the remaining three LTM-002 chain slices in dependency order, then begin LTM-003 without weakening the current Director deployment boundary.
+Begin LTM-003 without weakening the current Director deployment boundary: add the live Comfy adapter and provider-status mapping behind the tested API contract.

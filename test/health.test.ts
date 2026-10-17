@@ -33,8 +33,11 @@ describe("unknown route", () => {
     expect(response.status).toBe(404);
     await expect(response.json()).resolves.toEqual({
       ok: false,
-      error: "not_found",
-      path: "/v1/does-not-exist",
+      error: {
+        code: "ROUTE_NOT_FOUND",
+        message: "Route not found.",
+        details: { path: "/v1/does-not-exist" },
+      },
     });
   });
 });
