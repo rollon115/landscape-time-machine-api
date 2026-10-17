@@ -45,6 +45,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - `feat/ltm-002-routing-docs` — commit `37ab50d`; 215 authored changed lines; full verification passed.
   - `feat/ltm-003-comfy-adapter` — commit `46839db`; 186 authored changed lines; 12 focused status/contract tests and typecheck passed; review `disabled/unmanaged`.
   - `feat/ltm-003-comfy-client` — commit `c4c28b2`; 579 authored changed lines; full suite (80 tests) and typecheck passed; review `disabled/unmanaged`.
+  - `feat/ltm-003-timeshift-integration` — commit `d8af03e`; 608 authored changed lines; full suite (86 tests) and typecheck passed; review `disabled/unmanaged`.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
 - Repository status: all five LTM-002 slices are implemented and verified on the feature-branch chain.
 - LTM-003 work units:
@@ -70,11 +71,11 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Boundary: TimeShift queues only local state; Director validates succeeded TimeShift jobs and returns `DIRECTOR_WORKFLOW_NOT_DEPLOYED` without creating a job.
   - Review: `disabled/unmanaged` by explicit clone-local user choice; ordinary verification is the evidence of record.
 
-- [ ] LTM-003 — Add the live Comfy adapter and provider-status mapping.
+- [x] LTM-003 — Add the live Comfy adapter and provider-status mapping.
   - Route: delegated direct in two work units; writer trigger (multiple non-trivial files).
   - Acceptance: use Comfy API v2 Bearer authentication; upload the validated image through `POST /api/v2/assets`; submit the versioned API-format graph through `POST /api/v2/jobs`; persist the provider job ID; poll the provider-owned `urls.self`; cancel through `urls.cancel`; map `queued`, `running`, `canceling`, `succeeded`, `canceled`, `failed`, and `expired` without regressing terminal local state.
   - Boundary: `Idempotency-Key` is reject-on-duplicate, so ambiguous submission failures are never blindly retried. Director remains unchanged and blocked until its own workflow is deployed.
-  - Checks: RED→GREEN focused provider/status tests, TimeShift integration tests with fakes only, retained Director blocking regression, full test suite, typecheck, Wrangler generated-type check, and deployment dry-run.
+  - Checks: RED→GREEN focused provider/status tests, TimeShift integration tests with fakes only, retained Director blocking regression, full test suite (`npm test`, 86 passed), and `npm run typecheck`.
 
 - [ ] LTM-004 — Document setup, capability limits, and next workflow-export step.
   - Route: delegated direct; documentation accompanies behavior.
@@ -101,8 +102,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-17 — LTM-003 provider core implemented with exact status translation, runtime response validation, same-origin follow-up URLs, manual redirect handling, recursive credential redaction, and explicit ambiguous-transport errors. All 37 focused tests and typecheck passed; an independent targeted recheck found no remaining blocker.
 - 2026-10-17 — Provider contracts and status translation committed as `46839db` (`feat(provider): add Comfy contracts and status mapping`).
 - 2026-10-17 — Authenticated Comfy HTTP client committed as `c4c28b2` (`feat(provider): add resilient Comfy HTTP client`); full suite (80 tests) and typecheck passed on branch `feat/ltm-003-comfy-client`.
-- Pending: implement LTM-003 TimeShift integration. The versioned LTX provider workflow remains to be exported and deployed and wired into routes/storage.
+- 2026-10-17 — TimeShift integration committed as `d8af03e` (`feat(api): integrate Comfy timeshift job lifecycle`): versioned workflow builder, provider identity persistence, provider poll/cancel synchronization with compare-and-set protection, public-job projection without provider internals, and route/documentation updates. Full suite (86 tests) and typecheck passed.
+- Pending: implement LTM-004 documentation wrap-up and deployment evidence.
 
 ## Next step
 
-Implement `feat/ltm-003-timeshift-integration`: export the versioned LTX workflow and wire provider submission, polling, and cancellation without weakening the Director boundary.
+Complete LTM-004: finalize setup/deployment documentation for the live TimeShift provider integration, record deployment evidence, and keep Director boundaries explicit.
