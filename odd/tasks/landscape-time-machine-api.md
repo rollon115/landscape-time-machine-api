@@ -42,7 +42,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - `feat/ltm-002-assets` — commit `f4a0b46`; 292 authored changed lines; 7 focused tests passed.
   - `feat/ltm-002-timeshifts` — commit `6abd61f`; 152 authored changed lines; 7 focused tests passed.
   - `feat/ltm-002-jobs-director` — commit `7c34e2c`; 310 authored changed lines; 16 focused tests passed.
-  - `feat/ltm-002-routing-docs` — 206 authored changed lines; full verification passed; commit identity recorded by the closure evidence update.
+  - `feat/ltm-002-routing-docs` — commit `37ab50d`; 215 authored changed lines; full verification passed.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
 - Repository status: all five LTM-002 slices are implemented and verified on the feature-branch chain.
 
@@ -85,6 +85,7 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — TimeShift slice committed as `6abd61f` (`feat(api): add timeshift job endpoint`); all 7 focused tests passed.
 - 2026-10-16 — Jobs/Director slice committed as `7c34e2c` (`feat(api): add job and director endpoints`); all 16 focused tests passed.
 - 2026-10-17 — Routing/docs slice passed all 43 tests, TypeScript typecheck, Wrangler generated-type verification, deployment dry-run (13.41 KiB / gzip 4.00 KiB), and staged-diff whitespace validation.
+- 2026-10-17 — Routing/docs slice committed as `37ab50d` (`feat(api): wire v1 routes and document contracts`).
 - Pending: implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
