@@ -45,6 +45,13 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - `feat/ltm-002-routing-docs` — commit `37ab50d`; 215 authored changed lines; full verification passed.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
 - Repository status: all five LTM-002 slices are implemented and verified on the feature-branch chain.
+- LTM-003 work units:
+  1. Provider core — typed Comfy API v2 asset/job client, exact provider-status translation, protocol errors, and deterministic fetch fakes.
+  2. TimeShift integration — versioned LTX 2.5 API workflow, `core/ASSET` injection, provider identity persistence, polling/cancellation synchronization, and public-job projection.
+- LTM-003 child order:
+  1. `feat/ltm-003-comfy-adapter` — provider contracts, status translation, and typed errors.
+  2. `feat/ltm-003-comfy-client` — authenticated HTTP transport, protocol validation, and security hardening; based on `feat/ltm-003-comfy-adapter`.
+  3. `feat/ltm-003-timeshift-integration` — versioned workflow plus route, storage, polling, and cancellation wiring; based on `feat/ltm-003-comfy-client`.
 
 ## Tasks
 
@@ -62,9 +69,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Review: `disabled/unmanaged` by explicit clone-local user choice; ordinary verification is the evidence of record.
 
 - [ ] LTM-003 — Add the live Comfy adapter and provider-status mapping.
-  - Route: delegated direct; writer trigger (multiple non-trivial files).
-  - Acceptance: TimeShift persists provider IDs through an adapter; the existing Director deployment boundary remains truthful.
-  - Checks: service tests for provider/status mapping and Director blocking.
+  - Route: delegated direct in two work units; writer trigger (multiple non-trivial files).
+  - Acceptance: use Comfy API v2 Bearer authentication; upload the validated image through `POST /api/v2/assets`; submit the versioned API-format graph through `POST /api/v2/jobs`; persist the provider job ID; poll the provider-owned `urls.self`; cancel through `urls.cancel`; map `queued`, `running`, `canceling`, `succeeded`, `canceled`, `failed`, and `expired` without regressing terminal local state.
+  - Boundary: `Idempotency-Key` is reject-on-duplicate, so ambiguous submission failures are never blindly retried. Director remains unchanged and blocked until its own workflow is deployed.
+  - Checks: RED→GREEN focused provider/status tests, TimeShift integration tests with fakes only, retained Director blocking regression, full test suite, typecheck, Wrangler generated-type check, and deployment dry-run.
 
 - [ ] LTM-004 — Document setup, capability limits, and next workflow-export step.
   - Route: delegated direct; documentation accompanies behavior.
@@ -86,8 +94,11 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-16 — Jobs/Director slice committed as `7c34e2c` (`feat(api): add job and director endpoints`); all 16 focused tests passed.
 - 2026-10-17 — Routing/docs slice passed all 43 tests, TypeScript typecheck, Wrangler generated-type verification, deployment dry-run (13.41 KiB / gzip 4.00 KiB), and staged-diff whitespace validation.
 - 2026-10-17 — Routing/docs slice committed as `37ab50d` (`feat(api): wire v1 routes and document contracts`).
+- 2026-10-17 — Comfy API v2 contract verified from the official OpenAPI specification: Bearer auth, typed `core/ASSET` references, durable pollable jobs, provider-owned follow-up URLs, explicit cancellation, and single-use idempotency keys.
+- 2026-10-17 — Recovered the exact 50-node API graph from successful validation job `4fd5326e-4485-42e7-a8b8-2b2edb5f190e`; the workflow duration input is 20 seconds and internally computes `20 * 24 + 1` frames.
+- 2026-10-17 — LTM-003 provider core implemented with exact status translation, runtime response validation, same-origin follow-up URLs, manual redirect handling, recursive credential redaction, and explicit ambiguous-transport errors. All 37 focused tests and typecheck passed; an independent targeted recheck found no remaining blocker.
 - Pending: implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
 
 ## Next step
 
-Begin LTM-003 without weakening the current Director deployment boundary: add the live Comfy adapter and provider-status mapping behind the tested API contract.
+Commit the verified provider core, then add the versioned LTX workflow and wire provider submission, polling, and cancellation behind the tested API contract without weakening the Director boundary.
