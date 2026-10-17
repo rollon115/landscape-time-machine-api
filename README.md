@@ -135,7 +135,7 @@ npm run cf-typegen  # regenerate worker-configuration.d.ts
 
 | Name | Kind | Notes |
 | --- | --- | --- |
-| `COMFY_BASE_URL` | plain var | Defaults to `https://api.comfy.org`. |
+| `COMFY_BASE_URL` | plain var | Defaults to `https://cloud.comfy.org`. |
 | `COMFY_API_KEY` | **secret** | Server-only. Never logged, never returned in a response. |
 
 Set the deployed secret with:

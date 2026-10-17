@@ -3,3 +3,6 @@
 #
 # Server-only credential: it is never logged nor returned in a response.
 COMFY_API_KEY=replace-me-with-your-comfy-cloud-api-key
+
+# Optional override. Defaults to https://cloud.comfy.org.
+# COMFY_BASE_URL=https://cloud.comfy.org

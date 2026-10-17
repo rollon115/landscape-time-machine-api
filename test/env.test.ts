@@ -6,17 +6,17 @@ describe("readConfig", () => {
     expect(
       readConfig({
         COMFY_API_KEY: "  test-key-not-a-real-secret  ",
-        COMFY_BASE_URL: "https://api.comfy.org///",
+        COMFY_BASE_URL: "https://cloud.comfy.org///",
       }),
     ).toEqual({
       comfyApiKey: "test-key-not-a-real-secret",
-      comfyBaseUrl: "https://api.comfy.org",
+      comfyBaseUrl: "https://cloud.comfy.org",
     });
   });
 
   it("uses the documented default base URL", () => {
     expect(readConfig({ COMFY_API_KEY: "test-key" }).comfyBaseUrl).toBe(
-      "https://api.comfy.org",
+      "https://cloud.comfy.org",
     );
   });
 

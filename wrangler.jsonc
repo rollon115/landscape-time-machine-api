@@ -8,7 +8,7 @@
     "enabled": true
   },
   "vars": {
-    "COMFY_BASE_URL": "https://api.comfy.org"
+    "COMFY_BASE_URL": "https://cloud.comfy.org"
   }
   // Secret (NOT a plain var): set with
   //   npx wrangler secret put COMFY_API_KEY

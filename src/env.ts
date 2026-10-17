@@ -23,7 +23,7 @@ export class ConfigError extends Error {
   }
 }
 
-const DEFAULT_COMFY_BASE_URL = "https://api.comfy.org";
+const DEFAULT_COMFY_BASE_URL = "https://cloud.comfy.org";
 
 /**
  * Validate the runtime configuration.

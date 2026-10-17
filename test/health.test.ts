@@ -4,7 +4,7 @@ import type { Env } from "../src/env";
 
 const env: Env = {
   COMFY_API_KEY: "test-key-not-a-real-secret",
-  COMFY_BASE_URL: "https://api.comfy.org",
+  COMFY_BASE_URL: "https://cloud.comfy.org",
 };
 
 async function get(path: string): Promise<Response> {
