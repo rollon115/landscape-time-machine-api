@@ -43,6 +43,8 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - `feat/ltm-002-timeshifts` — commit `6abd61f`; 152 authored changed lines; 7 focused tests passed.
   - `feat/ltm-002-jobs-director` — commit `7c34e2c`; 310 authored changed lines; 16 focused tests passed.
   - `feat/ltm-002-routing-docs` — commit `37ab50d`; 215 authored changed lines; full verification passed.
+  - `feat/ltm-003-comfy-adapter` — commit `46839db`; 186 authored changed lines; 12 focused status/contract tests and typecheck passed; review `disabled/unmanaged`.
+  - `feat/ltm-003-comfy-client` — commit `c4c28b2`; 579 authored changed lines; full suite (80 tests) and typecheck passed; review `disabled/unmanaged`.
 - Review mode: clone-local RDD is disabled after a provider-issued continuation rebound the accumulated committed candidate to unrelated unstaged paths. Global mode remains unchanged.
 - Repository status: all five LTM-002 slices are implemented and verified on the feature-branch chain.
 - LTM-003 work units:
@@ -97,8 +99,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-17 — Comfy API v2 contract verified from the official OpenAPI specification: Bearer auth, typed `core/ASSET` references, durable pollable jobs, provider-owned follow-up URLs, explicit cancellation, and single-use idempotency keys.
 - 2026-10-17 — Recovered the exact 50-node API graph from successful validation job `4fd5326e-4485-42e7-a8b8-2b2edb5f190e`; the workflow duration input is 20 seconds and internally computes `20 * 24 + 1` frames.
 - 2026-10-17 — LTM-003 provider core implemented with exact status translation, runtime response validation, same-origin follow-up URLs, manual redirect handling, recursive credential redaction, and explicit ambiguous-transport errors. All 37 focused tests and typecheck passed; an independent targeted recheck found no remaining blocker.
-- Pending: implement LTM-003. The versioned LTX provider workflow remains to be exported and deployed.
+- 2026-10-17 — Provider contracts and status translation committed as `46839db` (`feat(provider): add Comfy contracts and status mapping`).
+- 2026-10-17 — Authenticated Comfy HTTP client committed as `c4c28b2` (`feat(provider): add resilient Comfy HTTP client`); full suite (80 tests) and typecheck passed on branch `feat/ltm-003-comfy-client`.
+- Pending: implement LTM-003 TimeShift integration. The versioned LTX provider workflow remains to be exported and deployed and wired into routes/storage.
 
 ## Next step
 
-Commit the verified provider core, then add the versioned LTX workflow and wire provider submission, polling, and cancellation behind the tested API contract without weakening the Director boundary.
+Implement `feat/ltm-003-timeshift-integration`: export the versioned LTX workflow and wire provider submission, polling, and cancellation without weakening the Director boundary.
