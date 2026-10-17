@@ -77,10 +77,10 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
   - Boundary: `Idempotency-Key` is reject-on-duplicate, so ambiguous submission failures are never blindly retried. Director remains unchanged and blocked until its own workflow is deployed.
   - Checks: RED→GREEN focused provider/status tests, TimeShift integration tests with fakes only, retained Director blocking regression, full test suite (`npm test`, 86 passed), and `npm run typecheck`.
 
-- [ ] LTM-004 — Document setup, capability limits, and next workflow-export step.
+- [x] LTM-004 — Document setup, capability limits, and next workflow-export step.
   - Route: delegated direct; documentation accompanies behavior.
   - Acceptance: another developer can configure the API without guessing workflow identifiers or assuming Director is live.
-  - Checks: structural documentation readback.
+  - Checks: structural documentation readback, `npm run typecheck`, `npm test` (86 passed), `npm run cf-typegen`, and `npx wrangler deploy --dry-run`.
 
 ## Progress and evidence
 
@@ -103,8 +103,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-17 — Provider contracts and status translation committed as `46839db` (`feat(provider): add Comfy contracts and status mapping`).
 - 2026-10-17 — Authenticated Comfy HTTP client committed as `c4c28b2` (`feat(provider): add resilient Comfy HTTP client`); full suite (80 tests) and typecheck passed on branch `feat/ltm-003-comfy-client`.
 - 2026-10-17 — TimeShift integration committed as `d8af03e` (`feat(api): integrate Comfy timeshift job lifecycle`): versioned workflow builder, provider identity persistence, provider poll/cancel synchronization with compare-and-set protection, public-job projection without provider internals, and route/documentation updates. Full suite (86 tests) and typecheck passed.
-- Pending: implement LTM-004 documentation wrap-up and deployment evidence.
+- 2026-10-17 — LTM-004 documentation wrap-up completed: default Comfy base URL moved to `https://cloud.comfy.org` across runtime config and tests, setup docs aligned, generated runtime types refreshed, and deploy dry-run captured with the cloud endpoint binding.
+- Pending: prepare final contest submission package and demo evidence.
 
 ## Next step
 
-Complete LTM-004: finalize setup/deployment documentation for the live TimeShift provider integration, record deployment evidence, and keep Director boundaries explicit.
+Prepare the final submission checklist and demo artifacts for the Open Source Higgsfield deadline.
