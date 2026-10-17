@@ -15,6 +15,15 @@ export interface Asset extends AssetMetadata {
 export type JobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 export type JobKind = "timeshift" | "director";
 
+export interface ProviderIdentity {
+  provider: "comfy";
+  remoteAssetId: string;
+  remoteJobId: string;
+  pollUrl: string;
+  cancelUrl: string;
+  workflowVersion: string;
+}
+
 interface BaseJob {
   id: string;
   kind: JobKind;
@@ -28,6 +37,7 @@ export interface TimeShiftJob extends BaseJob {
   assetId: string;
   prompt: string;
   durationSeconds: 20;
+  provider?: ProviderIdentity;
 }
 
 /** Reserved domain shape for a future verified Director workflow. */
@@ -37,3 +47,6 @@ export interface DirectorJob extends BaseJob {
 }
 
 export type Job = TimeShiftJob | DirectorJob;
+
+export type PublicTimeShiftJob = Omit<TimeShiftJob, "provider">;
+export type PublicJob = PublicTimeShiftJob | DirectorJob;

@@ -17,7 +17,14 @@ import {
   validateMetadata,
 } from "./comfy-protocol";
 
-export class ComfyApiClient {
+export interface ComfyProviderClient {
+  uploadAsset(input: UploadAssetInput): Promise<ComfyAsset>;
+  submitJob(input: SubmitJobInput): Promise<ComfyJob>;
+  pollJob(providerUrl: string): Promise<ComfyJob>;
+  cancelJob(providerUrl: string): Promise<ComfyJob>;
+}
+
+export class ComfyApiClient implements ComfyProviderClient {
   readonly #baseUrl: URL;
   readonly #apiKey: string;
   readonly #transport: ComfyHttpTransport;

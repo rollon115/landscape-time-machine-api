@@ -105,4 +105,41 @@ describe("InMemoryJobStore", () => {
     });
     await expect(store.get("ltm_missing")).resolves.toBeUndefined();
   });
+
+  it("updates a job when compareAndSet matches current state", async () => {
+    const store = new InMemoryJobStore();
+    const current = timeShiftJob("queued");
+    const next = { ...current, status: "running" as const, updatedAt: CANCELLED_AT };
+    await store.put(current);
+
+    await expect(store.compareAndSet(current, next)).resolves.toEqual({
+      outcome: "updated",
+      job: next,
+    });
+    await expect(store.get("ltm_seed")).resolves.toEqual(next);
+  });
+
+  it("returns conflict when compareAndSet expected state is stale", async () => {
+    const store = new InMemoryJobStore();
+    const current = timeShiftJob("queued");
+    await store.put(current);
+
+    const stale = { ...current, status: "running" as const };
+    const next = { ...current, status: "succeeded" as const, updatedAt: CANCELLED_AT };
+    await expect(store.compareAndSet(stale, next)).resolves.toMatchObject({
+      outcome: "conflict",
+      current,
+    });
+    await expect(store.get("ltm_seed")).resolves.toEqual(current);
+  });
+
+  it("returns not_found when compareAndSet target is missing", async () => {
+    const store = new InMemoryJobStore();
+    const expected = timeShiftJob("queued");
+    const next = { ...expected, status: "running" as const };
+
+    await expect(store.compareAndSet(expected, next)).resolves.toEqual({
+      outcome: "not_found",
+    });
+  });
 });

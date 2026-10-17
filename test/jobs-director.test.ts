@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../src/app";
 import type { Asset, DirectorJob, JobStatus, TimeShiftJob } from "../src/domain/models";
 import { InMemoryAssetStore, InMemoryJobStore } from "../src/storage/memory";
+import { FakeProviderClient } from "./v1-test-helpers";
 
 const BASE_URL = "https://example.com";
 const BASE_TIME = Date.parse("2026-10-16T12:00:00.000Z");
@@ -10,16 +11,19 @@ const PNG_BYTES = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
 function createHarness() {
   const assets = new InMemoryAssetStore();
   const jobs = new InMemoryJobStore();
+  const provider = new FakeProviderClient();
   let idSequence = 0;
   let timeSequence = 0;
   const app = createApp({
     assets,
     jobs,
+    provider,
+    timeShiftWorkflowVersion: "ltx2.5-timeshift-v1",
     createId: (prefix) => `${prefix}_test_${++idSequence}`,
     now: () => new Date(BASE_TIME + timeSequence++ * 1_000),
   });
 
-  return { app, assets, jobs };
+  return { app, assets, jobs, provider };
 }
 
 function jsonRequest(path: string, body: unknown): Request {
@@ -219,9 +223,9 @@ describe("routing and provider boundary", () => {
     });
   });
 
-  it("does not submit any provider request", async () => {
+  it("submits provider requests only for timeshifts and keeps Director blocked", async () => {
     const providerFetch = vi.spyOn(globalThis, "fetch");
-    const { app, assets, jobs } = createHarness();
+    const { app, assets, jobs, provider } = createHarness();
     await assets.put(seedAsset());
     await jobs.put(seedTimeShiftJob("succeeded"));
 
@@ -234,6 +238,10 @@ describe("routing and provider boundary", () => {
     );
     await app.fetch(jsonRequest("/v1/director", { jobIds: ["ltm_seed"] }));
 
+    expect(provider.uploadCalls).toHaveLength(1);
+    expect(provider.submitCalls).toHaveLength(1);
+    expect(provider.pollCalls).toHaveLength(0);
+    expect(provider.cancelCalls).toHaveLength(0);
     expect(providerFetch).not.toHaveBeenCalled();
   });
 });

@@ -13,10 +13,10 @@ Developer Platform**.
 | --- | --- |
 | `GET /health` | Implemented |
 | `POST /v1/assets` | Implemented with non-durable in-memory storage |
-| `POST /v1/timeshifts` | Implemented as an in-memory queued job; no provider call |
+| `POST /v1/timeshifts` | Implemented with Comfy asset upload + job submission and local projection |
 | `POST /v1/director` | Validates inputs, then reports the deployment boundary |
-| `GET /v1/jobs/:jobId` | Implemented with in-memory lookup |
-| `POST /v1/jobs/:jobId/cancel` | Implemented for queued and running jobs |
+| `GET /v1/jobs/:jobId` | Implemented with provider poll synchronization when available |
+| `POST /v1/jobs/:jobId/cancel` | Implemented with provider cancellation synchronization when available |
 | Director 3D composition | **Not live.** Reports `DIRECTOR_WORKFLOW_NOT_DEPLOYED` until a verified compositing workflow exists. |
 
 ## Requirements
@@ -39,8 +39,7 @@ curl -s http://localhost:8787/health
 # {"ok":true,"service":"landscape-time-machine","version":"0.1.0"}
 ```
 
-LTM-002 makes no external network calls. Its API key binding remains server-only
-and is reserved for the provider adapter in LTM-003.
+Provider credentials remain server-only and are never returned in API responses.
 
 ## Versioned HTTP contract
 
@@ -98,8 +97,11 @@ and the v1 duration of exactly 20 seconds:
 }
 ```
 
-The response is `202` with an `ltm_...` job in `queued` state. This establishes
-the asynchronous contract only; it does not submit a Comfy job in LTM-002.
+The response is `202` with an `ltm_...` job in `queued` state. The route uploads
+the stored image to Comfy (`POST /api/v2/assets`), submits the versioned LTX
+workflow (`POST /api/v2/jobs`), and persists provider identity internally for
+poll/cancel synchronization. Provider URLs and IDs are never exposed in public
+job payloads.
 
 ### `POST /v1/director`
 
@@ -110,13 +112,16 @@ create a Director job or claim that composition ran.
 
 ### Job lookup and cancellation
 
-`GET /v1/jobs/:jobId` returns the stored job or `404`. Public jobs use kind
-`timeshift | director` and status
-`queued | running | succeeded | failed | cancelled`.
+`GET /v1/jobs/:jobId` returns the stored job or `404`. For TimeShift jobs with
+provider identity, the API polls provider status and synchronizes local state
+without regressing terminal states. Public jobs use kind
+`timeshift | director` and status `queued | running | succeeded | failed | cancelled`.
 
-`POST /v1/jobs/:jobId/cancel` changes a `queued` or `running` job to
-`cancelled` and updates `updatedAt`. Missing jobs return `404`. Terminal jobs
-return `409` with `JOB_NOT_CANCELLABLE`.
+`POST /v1/jobs/:jobId/cancel` cancels through the provider when identity is
+present, maps provider `canceled` to local `cancelled`, and updates `updatedAt`.
+Without provider identity it falls back to local cancellation of `queued` and
+`running` jobs. Missing jobs return `404`. Terminal jobs return `409` with
+`JOB_NOT_CANCELLABLE`.
 
 ## Checks
 
@@ -156,6 +161,5 @@ changing the HTTP contract.
 
 ## Not implemented yet
 
-- The live Comfy provider adapter.
 - Director composition. It is intentionally blocked rather than faked.
 - Durable asset and job persistence.

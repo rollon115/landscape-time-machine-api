@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Asset, TimeShiftJob } from "../src/domain/models";
+import type { Asset } from "../src/domain/models";
 import { createTimeShift } from "../src/routes/timeshifts";
 import {
   BASE_URL,
@@ -21,8 +21,8 @@ function seedAsset(overrides: Partial<Asset> = {}): Asset {
 }
 
 describe("POST /v1/timeshifts", () => {
-  it("creates a queued 20-second job for an existing asset", async () => {
-    const { dependencies, assets, jobs } = createHarness();
+  it("uploads the asset, submits the versioned workflow, and hides provider identity in the response", async () => {
+    const { dependencies, assets, jobs, provider } = createHarness();
     await assets.put(seedAsset());
     const request = jsonRequest("/v1/timeshifts", {
       assetId: "ast_seed",
@@ -32,22 +32,54 @@ describe("POST /v1/timeshifts", () => {
     const response = await respond(() => createTimeShift(request, dependencies));
 
     expect(response.status).toBe(202);
-    const expectedJob: TimeShiftJob = {
+    const expectedPublicJob = {
       id: "ltm_test_1",
-      kind: "timeshift",
-      status: "queued",
+      kind: "timeshift" as const,
+      status: "queued" as const,
       assetId: "ast_seed",
       prompt: "Dawn becomes a fast-moving afternoon.",
-      durationSeconds: 20,
+      durationSeconds: 20 as const,
       createdAt: "2026-10-16T12:00:00.000Z",
       updatedAt: "2026-10-16T12:00:00.000Z",
     };
-    await expect(response.json()).resolves.toEqual({ ok: true, job: expectedJob });
-    await expect(jobs.get("ltm_test_1")).resolves.toEqual(expectedJob);
+
+    await expect(response.json()).resolves.toEqual({ ok: true, job: expectedPublicJob });
+    await expect(jobs.get("ltm_test_1")).resolves.toEqual({
+      ...expectedPublicJob,
+      provider: {
+        provider: "comfy",
+        remoteAssetId: "asset_remote_1",
+        remoteJobId: "job_remote_1",
+        pollUrl: "https://api.comfy.test/api/v2/jobs/job_remote_1",
+        cancelUrl: "https://api.comfy.test/api/v2/jobs/job_remote_1/cancel",
+        workflowVersion: "ltx2.5-timeshift-v1",
+      },
+    });
+
+    expect(provider.uploadCalls).toHaveLength(1);
+    expect(provider.uploadCalls[0]).toMatchObject({
+      contentType: "image/png",
+      filePath: "ast_seed.png",
+      idempotencyKey: "ltm_test_1_asset",
+    });
+
+    expect(provider.submitCalls).toHaveLength(1);
+    expect(provider.submitCalls[0]).toMatchObject({
+      idempotencyKey: "ltm_test_1_job",
+      metadata: {
+        localJobId: "ltm_test_1",
+        workflowVersion: "ltx2.5-timeshift-v1",
+      },
+    });
+    expect(provider.submitCalls[0]?.workflow).toMatchObject({
+      "398:376": { inputs: { value: "Dawn becomes a fast-moving afternoon." } },
+      "398:362": { inputs: { value: 20 } },
+      "395": { inputs: { image: { __type: "core/ASSET", info: { id: "asset_remote_1" } } } },
+    });
   });
 
   it("requires an existing asset", async () => {
-    const { dependencies } = createHarness();
+    const { dependencies, provider } = createHarness();
     const request = jsonRequest("/v1/timeshifts", {
       assetId: "ast_missing",
       prompt: "Advance the seasons.",
@@ -60,6 +92,8 @@ describe("POST /v1/timeshifts", () => {
       ok: false,
       error: { code: "ASSET_NOT_FOUND" },
     });
+    expect(provider.uploadCalls).toHaveLength(0);
+    expect(provider.submitCalls).toHaveLength(0);
   });
 
   it.each([
@@ -74,7 +108,7 @@ describe("POST /v1/timeshifts", () => {
       "INVALID_DURATION",
     ],
   ])("rejects invalid TimeShift input", async (body, code) => {
-    const { dependencies, assets } = createHarness();
+    const { dependencies, assets, provider } = createHarness();
     await assets.put(seedAsset());
     const response = await respond(() =>
       createTimeShift(jsonRequest("/v1/timeshifts", body), dependencies),
@@ -82,6 +116,8 @@ describe("POST /v1/timeshifts", () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toMatchObject({ ok: false, error: { code } });
+    expect(provider.uploadCalls).toHaveLength(0);
+    expect(provider.submitCalls).toHaveLength(0);
   });
 
   it("rejects malformed JSON without exposing parser errors", async () => {
