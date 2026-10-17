@@ -158,6 +158,12 @@ Submission-ready material lives under `docs/submission/`:
 - `open-source-higgsfield-entry-draft.md`
 - `open-source-higgsfield-demo-script.md`
 
+## Demo videos
+
+- Primary demo: https://youtu.be/MelOxV8ErSk
+- Alternate demo 1: https://youtu.be/JNjWHU4kJMQ
+- Alternate demo 2: https://youtu.be/4rphWCbyl6Y
+
 ## Storage
 
 LTM-002 uses injected **in-memory adapters** for asset bytes and jobs. Production

@@ -35,8 +35,8 @@ Landscape Time Machine is a Cloudflare Workers API that accepts a single JPEG/PN
 
 ## Links to fill before submit
 
-- **Repository URL**: `<ADD_PUBLIC_REPO_URL>`
-- **Demo video URL**: `<ADD_DEMO_VIDEO_URL>`
+- **Repository URL**: `https://github.com/rollon115/landscape-time-machine-api`
+- **Demo video URL**: `https://youtu.be/MelOxV8ErSk`
 - **Optional architecture/notes URL**: `<ADD_OPTIONAL_LINK>`
 
 ## Honest limitations
