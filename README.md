@@ -150,6 +150,14 @@ npx wrangler secret put COMFY_API_KEY
 npm run deploy
 ```
 
+## Contest submission package
+
+Submission-ready material lives under `docs/submission/`:
+
+- `open-source-higgsfield-checklist.md`
+- `open-source-higgsfield-entry-draft.md`
+- `open-source-higgsfield-demo-script.md`
+
 ## Storage
 
 LTM-002 uses injected **in-memory adapters** for asset bytes and jobs. Production

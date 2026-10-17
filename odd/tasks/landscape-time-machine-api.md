@@ -104,8 +104,9 @@ The validated image-to-video workflow is currently operated manually in Comfy Cl
 - 2026-10-17 — Authenticated Comfy HTTP client committed as `c4c28b2` (`feat(provider): add resilient Comfy HTTP client`); full suite (80 tests) and typecheck passed on branch `feat/ltm-003-comfy-client`.
 - 2026-10-17 — TimeShift integration committed as `d8af03e` (`feat(api): integrate Comfy timeshift job lifecycle`): versioned workflow builder, provider identity persistence, provider poll/cancel synchronization with compare-and-set protection, public-job projection without provider internals, and route/documentation updates. Full suite (86 tests) and typecheck passed.
 - 2026-10-17 — LTM-004 documentation wrap-up completed: default Comfy base URL moved to `https://cloud.comfy.org` across runtime config and tests, setup docs aligned, generated runtime types refreshed, and deploy dry-run captured with the cloud endpoint binding.
+- 2026-10-17 — Submission package drafted under `docs/submission/` with a form-ready entry draft, operator checklist, and 90–120 second demo script.
 - Pending: prepare final contest submission package and demo evidence.
 
 ## Next step
 
-Prepare the final submission checklist and demo artifacts for the Open Source Higgsfield deadline.
+Fill repository/demo URLs in the entry draft and submit the Typeform package.
